@@ -172,11 +172,11 @@ map.on('load', async () => {
       const filteredTrips = filterTripsbyTime(trips, timeFilter);
       const filteredStations = computeStationTraffic(stations, filteredTrips);
 
+      // Keep domain fixed to full-day max; only the range changes when filtering.
+      // Re-fitting domain to filtered data made quiet hours look as busy as daytime.
       timeFilter === -1
         ? radiusScale.range([0, 25])
         : radiusScale.range([3, 50]);
-
-      radiusScale.domain([0, d3.max(filteredStations, (d) => d.totalTraffic) || 0]);
 
       circles = circles
         .data(filteredStations, (d) => d.short_name)
